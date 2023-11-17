@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "262486586225",
+    "project_id": "parkingapp-67ea2",
+    "storage_bucket": "parkingapp-67ea2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:262486586225:android:de5bc7a2e29da849e33cd0",
+        "android_client_info": {
+          "package_name": "com.example.parkeasy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDwHL4gfUypo6zS6aebZitpxoQJOBlh1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:262486586225:android:71f8e098eaf33730e33cd0",
+        "android_client_info": {
+          "package_name": "com.example.vendors"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDwHL4gfUypo6zS6aebZitpxoQJOBlh1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
