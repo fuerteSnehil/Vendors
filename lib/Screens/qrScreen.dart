@@ -1,21 +1,16 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:vendors/Screens/printerScreen.dart';
 import 'package:vendors/Utils/constants.dart';
+import 'package:vendors/widgets/printer.dart';
 
 class QrScreen extends StatefulWidget {
   final String vehicleId;
 
   const QrScreen({required this.vehicleId, super.key});
   @override
-  _QrScreenState createState() => _QrScreenState();
+  State<QrScreen> createState() => _QrScreenState();
 }
 
 class _QrScreenState extends State<QrScreen> {
@@ -41,16 +36,28 @@ class _QrScreenState extends State<QrScreen> {
         vehicleData = documentSnapshot.data() as Map<String, dynamic>;
         setState(() {});
       } else {
-        // Handle the case where the document with the provided vehicleId doesn't exist.
-        print('Vehicle data with ID ${widget.vehicleId} does not exist.');
+        // // Handle the case where the document with the provided vehicleId doesn't exist.
+        // print('Vehicle data with ID ${widget.vehicleId} does not exist.');
       }
     } catch (e) {
-      // Handle any potential errors
-      print('Error fetching vehicle data: $e');
+      // // Handle any potential errors
+      // print('Error fetching vehicle data: $e');
     }
   }
 
-  final blueThermalPrinter = BlueThermalPrinter.instance;
+  void _openPrintDeviceOverlay() {
+    showModalBottomSheet(
+        context: context,
+        builder: (ctx) {
+          return Printer(
+            vehicleID: widget.vehicleId,
+            packingType: '${vehicleData!['amountType']} PARKING',
+            amountObtained: '${vehicleData!['amount30Min']} Rs.',
+            punchInTime: '${vehicleData!['punchInTime']}',
+            qrcode: widget.vehicleId,
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +144,7 @@ class _QrScreenState extends State<QrScreen> {
                           fontWeight: FontWeight.w500,
                           letterSpacing: 1.1),
                     ),
-                    Container(
+                    SizedBox(
                       height: MediaQuery.of(context).size.height * 0.3,
                       width: MediaQuery.of(context).size.width * 0.7,
                       child: RepaintBoundary(
@@ -163,24 +170,21 @@ class _QrScreenState extends State<QrScreen> {
                         height: 50,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.black,
+                            backgroundColor: amber,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
-                            ),
-                            primary: amber, // Background color
-                            onPrimary:
-                                Colors.black, // Text Color (Foreground color)
+                            ), // Text Color (Foreground color)
                           ),
-                          onPressed: () {
-                            _selectPrinterAndPrint();
-                          },
+                          onPressed: _openPrintDeviceOverlay,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(MdiIcons.printer),
+                              Icon(MdiIcons.fileDocument),
                               const SizedBox(
                                 width: 3,
                               ),
-                              const Text('Print Receipt')
+                              const Text('Generate Receipt')
                             ],
                           ),
                         ),
@@ -194,80 +198,5 @@ class _QrScreenState extends State<QrScreen> {
               backgroundColor: Colors.black,
             )),
     );
-  }
-
-  Future<void> _selectPrinterAndPrint() async {
-    // Discover available Bluetooth devices
-    final devices = await blueThermalPrinter.getBondedDevices();
-
-    // Capture the context outside the async function
-    final selectedDevice = await _showBluetoothDeviceSelectionDialog(devices);
-
-    if (selectedDevice != null) {
-      // Connect to the selected Bluetooth printer
-      final isConnected = await blueThermalPrinter.connect(selectedDevice);
-
-      if (isConnected) {
-        // Print the receipt
-        await printReceipt();
-
-        // Disconnect from the printer after printing
-        blueThermalPrinter.disconnect();
-      } else {
-        print('Failed to connect to the printer');
-      }
-    }
-  }
-
-  Future<BluetoothDevice?> _showBluetoothDeviceSelectionDialog(
-      List<BluetoothDevice> devices) async {
-    // Display a dialog with available Bluetooth devices
-    return await showDialog<BluetoothDevice>(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text('Select Bluetooth Printer'),
-          content: Column(
-            children: devices
-                .map((device) => ListTile(
-                      title: Text('${device.name}'),
-                      onTap: () {
-                        Navigator.of(dialogContext).pop(device);
-                      },
-                    ))
-                .toList(),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> printReceipt() async {
-    // Create the content to be printed
-    final content = _generatePrintContent();
-    // Convert the Uint8List to String
-    final contentString = String.fromCharCodes(content);
-
-    // Print the content
-    await blueThermalPrinter.write(contentString);
-  }
-
-  Uint8List _generatePrintContent() {
-    // Customize the content based on your requirements
-    final StringBuffer content = StringBuffer();
-    content.writeln('AirPort Parking');
-    content.writeln('Rajkot');
-    content.writeln('${vehicleData!['amountType']} PARKING');
-    content.writeln(widget.vehicleId);
-    content.writeln('₹ ${vehicleData!['amount30Min']}');
-    content.writeln('${vehicleData!['punchInTime']}');
-    // content.writeln('To:- ${widget.currentTime}');
-    content.writeln('');
-    content.writeln('');
-    content.writeln('QR Code:');
-    // content.writeln(widget.qrResult);
-
-    // Convert the content to bytes
-    return Uint8List.fromList(utf8.encode(content.toString()));
   }
 }
