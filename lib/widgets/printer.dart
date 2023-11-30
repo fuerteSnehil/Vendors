@@ -189,7 +189,7 @@ class _PrinterState extends State<Printer> {
     bytes += generator.text('Punch In Time: ${widget.punchInTime}',
         styles: const PosStyles(align: PosAlign.left));
 
-    bytes += generator.qrcode('example.com', size: QRSize.Size8);
+    bytes += generator.qrcode(widget.qrcode, size: QRSize.Size8);
     _printEscPos(bytes, generator);
   }
 
