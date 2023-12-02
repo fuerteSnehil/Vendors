@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:intl/intl.dart'; // Import the date and time formatting library
+import 'package:provider/provider.dart';
 import 'package:vendors/Screens/homeScreen.dart';
 import 'package:vendors/Screens/qrScreen.dart';
 import 'package:vendors/Screens/vehicleTypes.dart';
@@ -94,8 +94,8 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
             color: Colors.amber,
           ),
           shadowColor: Colors.black,
-          title: Text('Error'),
-          content: Text('Please enter a valid Vehicle Number.'),
+          title: const Text('Error'),
+          content: const Text('Please enter a valid Vehicle Number.'),
           actions: <Widget>[
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -103,7 +103,7 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         ),
@@ -128,7 +128,7 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_new),
           color: Colors.black,
           onPressed: () {
             Navigator.pop(
@@ -168,7 +168,7 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
                   maxLength: 10,
                   cursorColor: Colors.amber,
                   controller: textEditingController1,
-                  style: TextStyle(color: Colors.black, fontSize: 18),
+                  style: const TextStyle(color: Colors.black, fontSize: 18),
                   decoration: const InputDecoration(
                     labelText: 'Vehicle Number',
                   ),
@@ -187,8 +187,8 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
                   child: TextField(
                     enabled: false,
                     controller: textEditingController2,
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                    decoration: InputDecoration(
+                    style: const TextStyle(color: Colors.black, fontSize: 18),
+                    decoration: const InputDecoration(
                       labelText: "Vehicle type",
                       suffixIcon: Icon(
                         Icons.arrow_forward_ios,
@@ -200,7 +200,7 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
                 ),
                 TextField(
                   controller: textEditingController3,
-                  style: TextStyle(color: Colors.black, fontSize: 18),
+                  style: const TextStyle(color: Colors.black, fontSize: 18),
                   decoration: const InputDecoration(
                     labelText: 'Amount',
                   ),
@@ -273,22 +273,22 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          backgroundColor: amber,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
-                          primary: amber,
-                          onPrimary: Colors.black,
                         ),
                         onPressed: () {
                           uploadDataToFirestore();
                         },
-                        child: Text(
+                        child: const Text(
                           'Generate Receipt',
                           style: TextStyle(letterSpacing: 1, fontSize: 17),
                         ),

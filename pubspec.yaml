@@ -49,4 +49,20 @@ flutter:
 
   
   assets:
-    - assets/
+    - assets/parking.webp
+    - assets/icons/vendorApk.png
+    - assets/vendorApk.png
+    - assets/car.gif
+    - assets/car.png
+    - assets/collection.png
+    - assets/details.gif
+    - assets/done.gif
+    - assets/info.gif
+    - assets/kite.gif
+    - assets/man.gif
+    - assets/parking.png
+    - assets/qr.png
+    - assets/scan.png
+    - assets/vehicles.jpg
+    - assets/vendor.gif
+    - assets/vendorApk.png
