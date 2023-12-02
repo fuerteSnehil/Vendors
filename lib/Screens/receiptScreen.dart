@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart'; // Import the date and time formatting library
-import 'package:provider/provider.dart';
 import 'package:vendors/Screens/homeScreen.dart';
 import 'package:vendors/Screens/qrScreen.dart';
 import 'package:vendors/Screens/vehicleTypes.dart';
@@ -27,7 +26,7 @@ class GenerateQrScreen extends StatefulWidget {
 
 class _GenerateQrScreenState extends State<GenerateQrScreen> {
   // Create TextEditingController for the text fields
-  TextEditingController textEditingController1 = TextEditingController();
+   TextEditingController mytext = TextEditingController();
   TextEditingController textEditingController2 = TextEditingController();
   TextEditingController textEditingController3 = TextEditingController();
 
@@ -54,7 +53,7 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
   }
 
   Future<void> uploadDataToFirestore() async {
-    final vehicleNumber = textEditingController1.text;
+    final vehicleNumber = mytext.text;
 
     if (vehicleNumber.isNotEmpty) {
       final documentData = {
@@ -110,7 +109,11 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
       );
     }
   }
-
+  Future<void> _uploadDataAndReset() async {
+    await uploadDataToFirestore();
+    Provider.of<VehicleProvider>(context, listen: false)
+        .resetUpdateVehicleTypeValue();
+  }
   String getCurrentTime() {
     final now = DateTime.now();
     final formatter = DateFormat('yy/MM/dd hh:mm a');
@@ -128,7 +131,7 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: Icon(Icons.arrow_back_ios_new),
           color: Colors.black,
           onPressed: () {
             Navigator.pop(
@@ -168,7 +171,7 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
                   maxLength: 10,
                   cursorColor: Colors.amber,
                   controller: textEditingController1,
-                  style: const TextStyle(color: Colors.black, fontSize: 18),
+                  style: TextStyle(color: Colors.black, fontSize: 18),
                   decoration: const InputDecoration(
                     labelText: 'Vehicle Number',
                   ),
@@ -187,8 +190,8 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
                   child: TextField(
                     enabled: false,
                     controller: textEditingController2,
-                    style: const TextStyle(color: Colors.black, fontSize: 18),
-                    decoration: const InputDecoration(
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    decoration: InputDecoration(
                       labelText: "Vehicle type",
                       suffixIcon: Icon(
                         Icons.arrow_forward_ios,
@@ -200,7 +203,7 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
                 ),
                 TextField(
                   controller: textEditingController3,
-                  style: const TextStyle(color: Colors.black, fontSize: 18),
+                  style: TextStyle(color: Colors.black, fontSize: 18),
                   decoration: const InputDecoration(
                     labelText: 'Amount',
                   ),
@@ -273,22 +276,22 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.black,
-                          backgroundColor: amber,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
+                          primary: amber,
+                          onPrimary: Colors.black,
                         ),
                         onPressed: () {
                           uploadDataToFirestore();
                         },
-                        child: const Text(
+                        child: Text(
                           'Generate Receipt',
                           style: TextStyle(letterSpacing: 1, fontSize: 17),
                         ),
