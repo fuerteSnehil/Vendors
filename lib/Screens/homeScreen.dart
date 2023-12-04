@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vendors/Screens/collectionScreen.dart';
 import 'package:vendors/Screens/loginScreen.dart';
-import 'package:vendors/Screens/receiptScreen.dart';
+import 'package:vendors/Screens/generateQrScreen.dart';
 import 'package:vendors/Screens/scannerScreen.dart';
+import 'package:vendors/Screens/totalVehicles.dart';
 import 'package:vendors/Utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -247,26 +249,36 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.15,
                         width: MediaQuery.of(context).size.width * 0.33,
-                        child: Card(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.08,
-                                width: MediaQuery.of(context).size.width * 0.2,
-                                child: Image.asset(
-                                  'assets/vehicles.jpg',
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        TodayTotalVehiclesScreen()));
+                          },
+                          child: Card(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.08,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.2,
+                                  child: Image.asset(
+                                    'assets/vehicles.jpg',
+                                  ),
                                 ),
-                              ),
-                              const Text(
-                                'Total Vehicle',
-                                style: TextStyle(
-                                    letterSpacing: 1,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
+                                const Text(
+                                  'Total Vehicle',
+                                  style: TextStyle(
+                                      letterSpacing: 1,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -274,22 +286,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.15,
                       width: MediaQuery.of(context).size.width * 0.33,
-                      child: Card(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image.asset(
-                              'assets/collection.png',
-                              scale: 4,
-                            ),
-                            const Text(
-                              'Collections',
-                              style: TextStyle(
-                                  letterSpacing: 1,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.push(context,MaterialPageRoute(builder: (context)=>TodayCollectionScreen()));
+                        },
+                        child: Card(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Image.asset(
+                                'assets/collection.png',
+                                scale: 4,
+                              ),
+                              const Text(
+                                'Collections',
+                                style: TextStyle(
+                                    letterSpacing: 1,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

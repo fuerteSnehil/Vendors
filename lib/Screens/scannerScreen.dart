@@ -168,11 +168,11 @@ class _ScannerScreenState extends State<ScannerScreen> {
         }
 
         setState(() {
-          getVehicleName = 'Vehicle Name : $vehicleName';
+          getVehicleName = '$vehicleName';
           getPunchInTime = '$punchInTime';
           getAmountType = '$amountType';
-          getDate = 'Date : $date';
-          getamount = 'Amount for 30min : ₹ $amount30';
+          getDate = '$date';
+          getamount = '$amount30';
           getResult = vehicleName;
           getVehicleNo = vehicleNo;
           getamoun120 = amount120;

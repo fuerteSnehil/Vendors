@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:vendors/Screens/receiptScreen.dart';
+import 'package:vendors/Screens/generateQrScreen.dart';
 
 class VehicleTypeScreen extends StatefulWidget {
   final String phoneNo;

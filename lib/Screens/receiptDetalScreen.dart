@@ -37,11 +37,11 @@ class _QrScreenState extends State<QrScreen> {
         setState(() {});
       } else {
         // // Handle the case where the document with the provided vehicleId doesn't exist.
-        // print('Vehicle data with ID ${widget.vehicleId} does not exist.');
+        print('Vehicle data with ID ${widget.vehicleId} does not exist.');
       }
     } catch (e) {
       // // Handle any potential errors
-      // print('Error fetching vehicle data: $e');
+      print('Error fetching vehicle data: $e');
     }
   }
 

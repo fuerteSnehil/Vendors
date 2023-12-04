@@ -5,7 +5,7 @@ import 'package:intl/intl.dart'; // Import the date and time formatting library
 import 'package:provider/provider.dart';
 import 'package:vendors/Providers/vehicle_provider.dart';
 import 'package:vendors/Screens/homeScreen.dart';
-import 'package:vendors/Screens/qrScreen.dart';
+import 'package:vendors/Screens/receiptDetalScreen.dart';
 import 'package:vendors/Screens/vehicleTypes.dart';
 import 'package:vendors/Utils/constants.dart';
 
