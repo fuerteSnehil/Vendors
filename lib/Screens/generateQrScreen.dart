@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:intl/intl.dart'; // Import the date and time formatting library
-import 'package:provider/provider.dart';
-import 'package:vendors/Providers/vehicle_provider.dart';
 import 'package:vendors/Screens/homeScreen.dart';
 import 'package:vendors/Screens/receiptDetalScreen.dart';
 import 'package:vendors/Screens/vehicleTypes.dart';
@@ -96,8 +93,8 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
             color: Colors.amber,
           ),
           shadowColor: Colors.black,
-          title: Text('Error'),
-          content: Text('Please enter a valid Vehicle Number.'),
+          title: const Text('Error'),
+          content: const Text('Please enter a valid Vehicle Number.'),
           actions: <Widget>[
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -105,7 +102,7 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         ),
@@ -131,188 +128,178 @@ class _GenerateQrScreenState extends State<GenerateQrScreen> {
 
   @override
   Widget build(BuildContext context) {
-        final vehicle = Provider.of<VehicleProvider>(context, listen: true);
-    mytext = TextEditingController(text: vehicle.updateVehicleTypeValue);
-    return WillPopScope(
-      onWillPop: ()async{
-        vehicle.resetUpdateVehicleTypeValue();
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new),
-            color: Colors.black,
-            onPressed: () {
-               vehicle.resetUpdateVehicleTypeValue();
-              Navigator.pop(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => HomeScreen(phoneNo: widget.phoneNo)));
-            },
-          ),
-          backgroundColor: Colors.amber,
-          title: const Text(
-            'Receipt',
-            style: TextStyle(color: Colors.black),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new),
+          color: Colors.black,
+          onPressed: () {
+            Navigator.pop(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomeScreen(phoneNo: widget.phoneNo)));
+          },
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Container(
-            height: double.infinity,
-            width: double.infinity,
-            color: Colors.white,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Image.asset(
-                    'assets/info.gif',
-                    scale: 1,
+        backgroundColor: Colors.amber,
+        title: const Text(
+          'Receipt',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Image.asset(
+                  'assets/info.gif',
+                  scale: 1,
+                ),
+                const Text(
+                  'Please provide these details to generate receipt -',
+                  style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 1.2),
+                ),
+                TextField(
+                  textCapitalization: TextCapitalization.characters,
+                  maxLength: 10,
+                  cursorColor: Colors.amber,
+                  controller: textEditingController1,
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                  decoration: const InputDecoration(
+                    labelText: 'Vehicle Number',
                   ),
-                  const Text(
-                    'Please provide these details to generate receipt -',
-                    style: TextStyle(
-                        fontSize: 19,
-                        fontWeight: FontWeight.w400,
-                        letterSpacing: 1.2),
-                  ),
-                  TextField(
-                    textCapitalization: TextCapitalization.characters,
-                    maxLength: 10,
-                    cursorColor: Colors.amber,
-                    controller: mytext,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                VehicleTypeScreen(phoneNo: widget.phoneNo)));
+                    setState(() {
+                      isTapped = true;
+                    });
+                  },
+                  child: TextField(
+                    enabled: false,
+                    controller: textEditingController2,
                     style: TextStyle(color: Colors.black, fontSize: 18),
-                    decoration: const InputDecoration(
-                      labelText: 'Vehicle Number',
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      vehicle.updateVehicleType(mytext.text);
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  VehicleTypeScreen(phoneNo: widget.phoneNo)));
-                      setState(() {
-                        isTapped = true;
-                      });
-                    },
-                    child: TextField(
-                      enabled: false,
-                      controller: textEditingController2,
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                      decoration: InputDecoration(
-                        labelText: "Vehicle type",
-                        suffixIcon: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.black,
-                          size: 20,
-                        ),
+                    decoration: InputDecoration(
+                      labelText: "Vehicle type",
+                      suffixIcon: Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.black,
+                        size: 20,
                       ),
                     ),
                   ),
-                  TextField(
-                    controller: textEditingController3,
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                    decoration: const InputDecoration(
-                      labelText: 'Amount',
-                    ),
+                ),
+                TextField(
+                  controller: textEditingController3,
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                  decoration: const InputDecoration(
+                    labelText: 'Amount',
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          handleRadioValueChange(
-                              1); // Set the selectedRadio to 1 when 'PAID' is tapped
-                        },
-                        child: Container(
-                          color: Colors.white,
-                          width: double.infinity,
-                          child: Row(
-                            children: [
-                              Radio(
-                                activeColor: Colors.black,
-                                value: 1,
-                                groupValue: selectedRadio,
-                                onChanged: handleRadioValueChange,
-                              ),
-                              const Text('PAID'),
-                            ],
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          handleRadioValueChange(2);
-                        },
-                        child: Container(
-                          color: Colors.white,
-                          width: double.infinity,
-                          child: Row(
-                            children: [
-                              Radio(
-                                activeColor: Colors.black,
-                                value: 2,
-                                groupValue: selectedRadio,
-                                onChanged: handleRadioValueChange,
-                              ),
-                              const Text('DUE'),
-                            ],
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          handleRadioValueChange(3);
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          color: Colors.white,
-                          child: Row(
-                            children: [
-                              Radio(
-                                activeColor: Colors.black,
-                                value: 3,
-                                groupValue: selectedRadio,
-                                onChanged: handleRadioValueChange,
-                              ),
-                              const Text(
-                                'FIX',
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 1.2),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      SizedBox(
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        handleRadioValueChange(
+                            1); // Set the selectedRadio to 1 when 'PAID' is tapped
+                      },
+                      child: Container(
+                        color: Colors.white,
                         width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+                        child: Row(
+                          children: [
+                            Radio(
+                              activeColor: Colors.black,
+                              value: 1,
+                              groupValue: selectedRadio,
+                              onChanged: handleRadioValueChange,
                             ),
-                            primary: amber,
-                            onPrimary: Colors.black,
-                          ),
-                          onPressed: () {
-                             _uploadDataAndReset();
-                          },
-                          child: Text(
-                            'Generate Receipt',
-                            style: TextStyle(letterSpacing: 1, fontSize: 17),
-                          ),
+                            const Text('PAID'),
+                          ],
                         ),
                       ),
-                    ],
-                  )
-                ],
-              ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        handleRadioValueChange(2);
+                      },
+                      child: Container(
+                        color: Colors.white,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Radio(
+                              activeColor: Colors.black,
+                              value: 2,
+                              groupValue: selectedRadio,
+                              onChanged: handleRadioValueChange,
+                            ),
+                            const Text('DUE'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        handleRadioValueChange(3);
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            Radio(
+                              activeColor: Colors.black,
+                              value: 3,
+                              groupValue: selectedRadio,
+                              onChanged: handleRadioValueChange,
+                            ),
+                            const Text(
+                              'FIX',
+                              style:
+                                  TextStyle(fontSize: 15, letterSpacing: 1.2),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          primary: amber,
+                          onPrimary: Colors.black,
+                        ),
+                        onPressed: () {
+                          uploadDataToFirestore();
+                        },
+                        child: Text(
+                          'Generate Receipt',
+                          style: TextStyle(letterSpacing: 1, fontSize: 17),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
         ),

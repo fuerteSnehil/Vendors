@@ -37,7 +37,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'QR Scanner',
           style: TextStyle(color: Colors.black),
         ),
@@ -51,7 +51,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
           children: [
             Expanded(
               child: Container(
-                child: Column(
+                color: Colors.white,
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
@@ -64,7 +65,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
                     ),
                   ],
                 ),
-                color: Colors.white,
               ),
             ),
             Expanded(
@@ -78,7 +78,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                       width: MediaQuery.of(context).size.width * .5,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          textStyle: TextStyle(letterSpacing: 2, fontSize: 17),
+                          textStyle: const TextStyle(letterSpacing: 2, fontSize: 17),
                           backgroundColor: Colors.amber,
                           foregroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
@@ -88,7 +88,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                         onPressed: () {
                           scanQRCode();
                         },
-                        child: Text('Scan QR'),
+                        child: const Text('Scan QR'),
                       ),
                     ),
                     SizedBox(

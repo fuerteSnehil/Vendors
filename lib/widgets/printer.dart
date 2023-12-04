@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:image/image.dart' as img;
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_pos_printer_platform_image_3/flutter_pos_printer_platform_image_3.dart';
 import 'package:vendors/Utils/constants.dart';
+import 'package:intl/intl.dart';
 
 class Printer extends StatefulWidget {
   const Printer({
@@ -175,21 +178,33 @@ class _PrinterState extends State<Printer> {
     // PaperSize.mm80 or PaperSize.mm58
     final generator = Generator(PaperSize.mm80, profile);
     bytes += generator.setGlobalCodeTable('CP1252');
+
+    final ByteData data = await rootBundle.load('assets/parking.webp');
+    final Uint8List imgData = data.buffer.asUint8List();
+    final image = img.decodeImage(imgData);
+    const int newWidth = 200;
+    const int newHeight = 200;
+    final resizedImage =
+        img.copyResize(image!, width: newWidth, height: newHeight);
+
+    bytes += generator.imageRaster(resizedImage);
     bytes += generator.text('AirPort Parking',
-        styles: const PosStyles(align: PosAlign.center, bold: true));
+        styles: const PosStyles(align: PosAlign.center));
     bytes += generator.text('Rajkot',
         styles: const PosStyles(align: PosAlign.center));
     bytes += generator.text('----------------------------------------------');
+    bytes += generator.text(widget.packingType,
+        styles: const PosStyles(align: PosAlign.center));
+    bytes += generator.text('DATE: ${widget.punchInTime}',
+        styles: const PosStyles(align: PosAlign.center));
     bytes += generator.text('Vehicle Number: ${widget.vehicleID}',
-        styles: const PosStyles(align: PosAlign.left));
-    bytes += generator.text('Parking Type: ${widget.packingType}',
-        styles: const PosStyles(align: PosAlign.left));
-    bytes += generator.text('Amount Obtained: ${widget.amountObtained}',
-        styles: const PosStyles(align: PosAlign.left));
-    bytes += generator.text('Punch In Time: ${widget.punchInTime}',
-        styles: const PosStyles(align: PosAlign.left));
-
+        styles: const PosStyles(align: PosAlign.center, bold: false));
+    bytes += generator.text('Punch-in Time: ${widget.punchInTime}',
+        styles: const PosStyles(align: PosAlign.center));
+    bytes += generator.text('PAID: ${widget.amountObtained}',
+        styles: const PosStyles(align: PosAlign.center, bold: true));
     bytes += generator.qrcode(widget.qrcode, size: QRSize.Size8);
+
     _printEscPos(bytes, generator);
   }
 
